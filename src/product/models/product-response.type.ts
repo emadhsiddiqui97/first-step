@@ -22,8 +22,8 @@ export class ProductResponse {
   @ApiProperty({ description: 'Available stock quantity', example: 10 })
   stock: number;
 
-  @ApiProperty({ description: 'Seller identifier', example: 'seller-123', nullable: true, required: false })
-  sellerId: string | null;
+  @ApiProperty({ description: 'Seller user ID', example: '123e4567-e89b-12d3-a456-426614174000' })
+  sellerId: string;
 
   @ApiProperty({ description: 'Product creation timestamp', example: '2025-12-25T12:00:00.000Z' })
   createdAt: Date;

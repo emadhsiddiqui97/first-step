@@ -33,9 +33,9 @@ export class CreateProductDto {
   @IsOptional()
   stock?: number;
 
-  @ApiPropertyOptional({ description: 'Seller identifier', example: 'seller-123' })
+  @ApiProperty({ description: 'Seller user ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsString()
-  @IsOptional()
-  sellerId?: string;
+  @IsNotEmpty()
+  sellerId: string;
 }
 

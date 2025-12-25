@@ -16,6 +16,19 @@ async function bootstrap() {
     .setTitle('first step SaaS API')
     .setDescription('API documentation for first step  SaaS platform')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .addTag('auth', 'Authentication endpoints')
+    .addTag('users', 'User management endpoints')
     .addTag('products', 'Product management endpoints')
     .build();
   const document = SwaggerModule.createDocument(app, config);

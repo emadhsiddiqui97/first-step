@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './models/create-product.dto';
 import { UpdateProductDto } from './models/update-product.dto';
@@ -9,6 +9,12 @@ export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createProductDto: CreateProductDto): Promise<ProductResponse> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: createProductDto.sellerId },
+    });
+    if (!user) {
+      throw new BadRequestException(`User with ID ${createProductDto.sellerId} not found`);
+    }
     const product = await this.prisma.product.create({
       data: {
         title: createProductDto.title,
@@ -49,6 +55,14 @@ export class ProductService {
     if (!existingProduct) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
+    if (updateProductDto.sellerId) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: updateProductDto.sellerId },
+      });
+      if (!user) {
+        throw new BadRequestException(`User with ID ${updateProductDto.sellerId} not found`);
+      }
+    }
     const product = await this.prisma.product.update({
       where: { id },
       data: updateProductDto,
@@ -76,7 +90,7 @@ export class ProductService {
     imageUrl: string | null;
     category: string | null;
     stock: number;
-    sellerId: string | null;
+    sellerId: string;
     createdAt: Date;
     updatedAt: Date;
   }): ProductResponse {
